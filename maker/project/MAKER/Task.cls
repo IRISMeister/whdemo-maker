@@ -23,4 +23,14 @@ Method ClearAll() [ WebMethod ]
 	Do ##class(Ens.Director).CleanProduction()
 }
 
+ClassMethod StartProduction() As %Status [ WebMethod ]
+{
+	Return ##class(Ens.Director).StartProduction("MAKER.Production.Production1")
+}
+
+ClassMethod StopProduction() As %Status [ WebMethod ]
+{
+	Return ##class(Ens.Director).StopProduction(,1)
+}
+
 }
