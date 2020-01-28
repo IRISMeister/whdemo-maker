@@ -12,8 +12,8 @@ XData ProductionDefinition
   <Item Name="InitiateSendDeliveryNote" Category="" ClassName="MAKER.Service.InitiateSendDeliveryNote" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Adapter" Name="CallInterval">15</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
-  </Item>
-  <Item Name="MAKER.Service.HQ" Category="" ClassName="MAKER.Service.HQ" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
+  </Item> 
+  <Item Name="HQ" Category="" ClassName="MAKER.Service.HQ" PoolSize="0" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
     <Setting Target="Host" Name="AlertOnError">1</Setting>
   </Item>
   <Item Name="WSDC1" Category="" ClassName="MAKER.Operation.WSDC" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">

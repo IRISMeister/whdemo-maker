@@ -5,6 +5,7 @@ version: '3.7'
 #
 services:
   maker:
+    image: dpmeister/irisdemo:maker
     build:
       context: ./maker
       args:
