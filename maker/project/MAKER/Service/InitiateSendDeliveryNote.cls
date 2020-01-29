@@ -6,9 +6,9 @@ Class MAKER.Service.InitiateSendDeliveryNote Extends Ens.BusinessMetric
 Method OnCalculateMetrics() As %Status
 {
 	Set tSC=$$$OK
-	#;ToDo: 外部から取得するのが望ましい。wsdcはネームスペース名では無いので注意(一致させるのも良いかもしれない)
+	#;ToDo: 外部から取得するのが望ましい。wsdc値はホスト名。
 	For wsdc="WSDC1","WSDC2" {
-		Set tSC=..Exec(wsdc) //ToDo: error check?
+		Set tSC=..Exec(wsdc)
 		If $$$ISERR(tSC) Quit
 	}
 	Return tSC
@@ -17,24 +17,22 @@ Method OnCalculateMetrics() As %Status
 Method Exec(wsdc As %String) As %Status
 {
 	Set tSC=$$$OK
-
 	Try {
-		$$$LOGINFO("納品書の作成を開始:"_wsdc)
 		Set sql2="UPDATE Maker_Data.PurchaseOrder Set 配送予定日付=?,IS配送遅延=1 WHERE ID=?"
 		Set stmt2=##class(%SQL.Statement).%New()
 		Set tSC=stmt2.%Prepare(sql2)
-		If $$$ISERR(tSC) { Throw ##class(%Exception.StatusException).CreateFromStatus(tSC) }
+		$$$ThrowOnError(tSC)
 
 		Set sql3="DELETE FROM Maker_Data.PurchaseOrder WHERE ID=?" 
 		Set stmt3=##class(%SQL.Statement).%New()
 		Set tSC=stmt3.%Prepare(sql3)
-		If $$$ISERR(tSC) { Throw ##class(%Exception.StatusException).CreateFromStatus(tSC) }
+		$$$ThrowOnError(tSC)
 
 		Set today=##class(Common.Util).GetToday() 
 		Set sql="SELECT * FROM Maker_Data.PurchaseOrder WHERE 配送予定日付<=? AND DCコード=?"
 		$$$SQLDIRECTQUERY(rs,sql,$$$SQLARGS(today,wsdc))
 		If rs.%SQLCODE=100 {
-			$$$LOGINFO("納品書の作成対象無し:"_wsdc)
+			$$$LOGINFO("納品書作成("_wsdc_") :対象無し")
 			Quit
 		}
 		Set rs2=##class(%SQL.Statement).%ExecDirect(,"START TRANSACTION ISOLATION LEVEL READ COMMITTED")
@@ -53,11 +51,9 @@ Method Exec(wsdc As %String) As %Status
 			If (rs.IS配送遅延=0)&($R(10)>8) {  //一回遅延したものはもう遅延させない
 				Set newsenddate=rs."配送予定日付"+$R(3)+1
 				$$$SQLPREUPD(rs2,stmt2,$$$SQLARGS(newsenddate,id))
-				w rs.オーダ番号_" 出荷遅れ:"_$ZDATETIME(newsenddate),!
 				Continue
 			}
 
-			w rs.オーダ番号,!
 			Set order=##class(WSDC.Maker.DeliveryNote).%New()
 			Set order."オーダ番号"=rs.オーダ番号
 			Set order."オーダ日付"=rs."オーダ日付"
@@ -84,10 +80,7 @@ Method Exec(wsdc As %String) As %Status
 		$$$LOGINFO("納品書作成("_wsdc_") :"_container.Messages.Count()_"件")
 
 		Set tSC=..SendRequestAsync("WSDCRouter",container)
-		If $$$ISERR(tSC) {
-			#; throw
-			Throw ##class(%Exception.StatusException).CreateFromStatus(tSC)
-		}
+		$$$ThrowOnError(tSC)
 
 		#;ToDo: 処理済みの行を削除。ここでクラッシュすると、WSDCに同じ納品書が再送されることになる。WSDC側で重複時は無視するように対応が必要。
 		Set id="" For {
@@ -95,14 +88,10 @@ Method Exec(wsdc As %String) As %Status
 			$$$SQLPREUPD(rs3,stmt3,$$$SQLARGS(id))
 		}
 	}
-	 Catch e {
-		#;掛け捨てのロールバック
-		Set rs=##class(%SQL.Statement).%ExecDirect(,"ROLLBACK")
-		Do e.Log()
-		Set tSC = e.AsStatus()
-		$$$LOGERROR($SYSTEM.Status.GetErrorText(tSC))
-	 }
-	 k rs
+	Catch e {
+		$$$CATCH(e)
+	}
+	k rs
 	Set rs=##class(%SQL.Statement).%ExecDirect(,"SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED")
 	Return tSC
 }

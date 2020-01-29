@@ -11,19 +11,17 @@ Method OnProcessInput(pInput As %RegisteredObject, pOutput As %RegisteredObject)
 	Set %response.CharSet=%request.CharSet
 
 	Set tSC=$$$OK
-
+	Set resultContainer={}
+	Set resultContainer.Messages=[]
+	Set resultContainer.Count=0
 	Try {
-		Set req={}.%FromJSON(%request.Content)
-
 		Set st=$ZH
+		Set req={}.%FromJSON(%request.Content)
 		Set sql="INSERT INTO Maker_Data.PurchaseOrder (DCコード,オーダ番号,オーダ日付,配送予定日付,商品コード,数量) VALUES (?,?,?,?,?,?)"
 		Set stmt=##class(%SQL.Statement).%New()
 		Set tSC=stmt.%Prepare(sql)
-		If $$$ISERR(tSC) { Throw ##class(%Exception.StatusException).CreateFromStatus(tSC) }
+		$$$THROWIFERROR(tSC)
 		
-		Set resultContainer={}
-		Set resultContainer.Messages=[]
-		Set resultContainer.Count=0
 		Set rs=##class(%SQL.Statement).%ExecDirect(,"START TRANSACTION")
 
 		Set DCコード=req.WSDCName

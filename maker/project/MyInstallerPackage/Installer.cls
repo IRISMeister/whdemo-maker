@@ -75,11 +75,12 @@ ClassMethod setup(ByRef tVars) As %Status
 		Set webapp="/csp/maker/dispatcher"
 		Set tSC = ##Class(Security.Applications).Create(webapp)
 		Set tSC = ##Class(Security.Applications).Get(webapp,.props)
-        Set props("DispatchClass")="MAKER.REST.Dispatcher"
-        Set props("Resource")=""
+		Set props("DispatchClass")="MAKER.REST.Dispatcher"
+		Set props("Resource")=""
 		Set props("AutheEnabled")=32
-        Set props("NameSpace")=Namespace
-        Set tSC = ##Class(Security.Applications).Modify(webapp,.props)
+		Set props("NameSpace")=Namespace
+		Set props("IsNameSpaceDefault")=0
+		Set tSC = ##Class(Security.Applications).Modify(webapp,.props)
 
 		#; add an ECP Server definition
 		Kill Properties

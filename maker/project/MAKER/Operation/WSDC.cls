@@ -14,7 +14,6 @@ Method Exec(pRequest As WSDC.Maker.DeliveryNoteContainer, Output pResponse As En
 	Set tSC=$$$OK
 
 	Try {
-		$$$LOGINFO("納品書の送付を開始")
 		Set tSC=..Adapter.InvokeMethod("ReceiveDeliveryNote",.WSResult,pRequest)
 		If $$$ISERR(tSC) {
 			#; throw
@@ -25,9 +24,7 @@ Method Exec(pRequest As WSDC.Maker.DeliveryNoteContainer, Output pResponse As En
 
 	}
 	 Catch e {
-		Do e.Log()
-		Set tSC = e.AsStatus()
-		$$$LOGERROR($SYSTEM.Status.GetErrorText(tSC))
+		 $$$CATCH(e)
 	 }
 	 
 	 Return tSC
