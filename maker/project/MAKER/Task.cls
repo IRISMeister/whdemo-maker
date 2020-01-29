@@ -16,11 +16,12 @@ Method Test() As %String [ WebMethod ]
 	Return $ZDATETIME($h)
 }
 
-Method ClearAll() [ WebMethod ]
+Method ClearAll() As %Status [ WebMethod ]
 {
 	Do ##class(MAKER.Util).ClearAll()
 	Do ##class(Ens.Purge).PurgeAll(.tDeletedCount,0,0,1)
 	Do ##class(Ens.Director).CleanProduction()
+	Return $$$OK
 }
 
 ClassMethod StartProduction() As %Status [ WebMethod ]
