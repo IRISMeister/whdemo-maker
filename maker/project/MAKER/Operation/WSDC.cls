@@ -24,7 +24,7 @@ Method Exec(pRequest As WSDC.Maker.DeliveryNoteContainer, Output pResponse As En
 
 	}
 	 Catch e {
-		 $$$CATCH(e)
+		 $$$CATCH(e,tSC)
 	 }
 	 
 	 Return tSC
