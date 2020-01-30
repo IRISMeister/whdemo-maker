@@ -32,8 +32,8 @@ Method Exec(wsdc As %String) As %Status
 		Set sql="SELECT * FROM Maker_Data.PurchaseOrder WHERE 配送予定日付<=? AND DCコード=?"
 		$$$SQLDIRECTQUERY(rs,sql,$$$SQLARGS(today,wsdc))
 		If rs.%SQLCODE=100 {
-			$$$LOGINFO("納品書作成("_wsdc_") :対象無し")
-			Quit
+			#;$$$LOGINFO("納品書作成("_wsdc_") :対象無し")
+			Quit  ; Tryからの脱出
 		}
 		Set rs2=##class(%SQL.Statement).%ExecDirect(,"START TRANSACTION ISOLATION LEVEL READ COMMITTED")
 

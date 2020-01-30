@@ -20,7 +20,7 @@ Method Exec(pRequest As WSDC.Maker.DeliveryNoteContainer, Output pResponse As En
 			Throw ##class(%Exception.StatusException).CreateFromStatus(tSC)
 		}
 
-		$$$LOGINFO(pRequest.Messages.Count()_"件送信")
+		$$$LOGINFO("納品書送信:"_pRequest.Messages.Count()_"件")
 
 	}
 	 Catch e {

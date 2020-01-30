@@ -17,14 +17,14 @@ XData ProductionDefinition
     <Setting Target="Host" Name="AlertOnError">1</Setting>
   </Item>
   <Item Name="WSDC1" Category="" ClassName="MAKER.Operation.WSDC" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
-    <Setting Target="Adapter" Name="WebServiceURL">http://MACBETH:52773/csp/wsdc/WSDC.Service.Maker.cls</Setting>
+    <Setting Target="Adapter" Name="WebServiceURL">http://wsdc1:52773/csp/wsdc/WSDC.Service.Maker.cls</Setting>
     <Setting Target="Adapter" Name="WebServiceClientClass">WSDC.Maker.WSDC.MakerSoap</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">E=RD</Setting>
     <Setting Target="Adapter" Name="SOAPCredentials">default</Setting>
     <Setting Target="Host" Name="AlertOnError">1</Setting>
   </Item>
   <Item Name="WSDC2" Category="" ClassName="MAKER.Operation.WSDC" PoolSize="1" Enabled="true" Foreground="false" Comment="" LogTraceEvents="false" Schedule="">
-    <Setting Target="Adapter" Name="WebServiceURL">http://MACBETH:52773/csp/wsdc2/WSDC.Service.Maker.cls</Setting>
+    <Setting Target="Adapter" Name="WebServiceURL">http://wsdc2:52773/csp/wsdc2/WSDC.Service.Maker.cls</Setting>
     <Setting Target="Adapter" Name="WebServiceClientClass">WSDC.Maker.WSDC.MakerSoap</Setting>
     <Setting Target="Host" Name="ReplyCodeActions">E=RD</Setting>
     <Setting Target="Adapter" Name="SOAPCredentials">default</Setting>
